@@ -27,6 +27,7 @@
         android:padding="10dp">
         <EditText
             android:id="@+id/editTextEmail"
+            android:drawableLeft="@drawable/ic_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="5dp"
@@ -34,6 +35,7 @@
             android:inputType="textEmailAddress" />
         <EditText
             android:id="@+id/editTextPassword"
+            android:drawableLeft="@drawable/ic_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="5dp"
