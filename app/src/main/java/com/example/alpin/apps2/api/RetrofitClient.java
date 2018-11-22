@@ -14,7 +14,7 @@ public class RetrofitClient {
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        
+
     }
 
     public static synchronized RetrofitClient getInstance(){
