@@ -1,7 +1,10 @@
 package com.example.alpin.apps2.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.DialogPreference;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +19,7 @@ import android.widget.Toast;
 import com.example.alpin.apps2.R;
 import com.example.alpin.apps2.Storage.SharedPrefManager;
 import com.example.alpin.apps2.activities.LoginActivity;
+import com.example.alpin.apps2.activities.MainActivity;
 import com.example.alpin.apps2.activities.ProfileActivity;
 import com.example.alpin.apps2.api.RetrofitClient;
 import com.example.alpin.apps2.models.DefaultResponse;
@@ -154,6 +158,48 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         startActivity(intent);
     }
 
+    private void deleteUser(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Are you sure?");
+        builder.setMessage("This action is irreversible");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                User user = SharedPrefManager.getmInstance(getActivity()).getUser();
+                Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().deletePassword(user.getId());
+
+                call.enqueue(new Callback<DefaultResponse>() {
+                    @Override
+                    public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+
+                        if(!response.body().isErr()){
+                            SharedPrefManager.getmInstance(getActivity()).clear();
+                            SharedPrefManager.getmInstance(getActivity()).clear();
+                            Intent intent = new Intent(getActivity(),MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+                        Toast.makeText(getActivity(), response.body().getMsg(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<DefaultResponse> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog ad = builder.create();
+        ad.show();
+    }
+
     @Override
     public void onClick(View v) {
         switch(v.getId()){
@@ -167,6 +213,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 logout();
                 break;
             case R.id.buttonDelete:
+                deleteUser();
                 break;
         }
     }

@@ -5,6 +5,7 @@ import com.example.alpin.apps2.models.LoginResponse;
 import com.example.alpin.apps2.models.UsersResponse;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -50,6 +51,11 @@ public interface Api {
             @Field("currentpassword") String currentpassword,
             @Field("newpassword") String newpassword,
             @Field("email") String email
+    );
+
+    @DELETE("deleteuser/{id}")
+    Call<DefaultResponse> deletePassword(
+        @Path("id") int id
     );
 
 }
